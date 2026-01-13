@@ -4,17 +4,17 @@ export default function Results() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const completed = location.state?.completed || [];
+  const selected = location.state?.selected || [];
 
   return (
     <div>
       <h1>Completed Rides</h1>
 
-      {completed.length === 0 ? (
+      {selected.length === 0 ? (
         <p>No rides selected.</p>
       ) : (
         <ul>
-          {completed.map(ride => (
+          {selected.map(ride => (
             <li key={ride}>{ride}</li>
           ))}
         </ul>

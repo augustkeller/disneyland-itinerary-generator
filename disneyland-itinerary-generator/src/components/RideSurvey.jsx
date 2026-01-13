@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 const URL = "https://queue-times.com/parks/6/queue_times.json";
 
-function CategorySelector() {
+function RideSurvey() {
   const [checkedRides, setCheckedRides] = useState({});
   const navigate = useNavigate();
 
@@ -32,7 +32,7 @@ function CategorySelector() {
     );
 
     navigate("/results", {
-      state: { completed: selectedRides },
+      state: { selected: selectedRides },
     });
   }
 
@@ -64,4 +64,4 @@ function CategorySelector() {
   );
 }
 
-export default CategorySelector;
+export default RideSurvey;
