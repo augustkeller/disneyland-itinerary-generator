@@ -1,66 +1,66 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 const URL = "https://queue-times.com/parks/6/queue_times.json";
 
 function CategorySelector() {
-  const [isChecked, setIsChecked] = useState(false);
+  const [checkedRides, setCheckedRides] = useState({});
+  const navigate = useNavigate();
 
-  function HandleChange(event) {
-    const checked = event.target.checked;
-    setIsChecked(checked);
+  const rides = [
+    { label: "Haunted Mansion", value: "haunted_mansion" },
+    { label: "Jungle Cruise", value: "jungle_cruise" },
+    { label: "Space Mountain", value: "space_mountain" },
+    { label: "It's a Small World", value: "its_a_small_world" },
+    { label: "Thunder Mountain Railroad", value: "thunder_mountain_railroad" },
+  ];
+
+  function handleChange(event) {
+    const { value, checked } = event.target;
+
+    setCheckedRides((prev) => ({
+      ...prev,
+      [value]: checked,
+    }));
   }
 
-  async function fetchQueueTimes() {
-    const response = await fetch(URL);
-    const data = await response.json();
-    console.log(data);
+  function handleSubmit(event) {
+    event.preventDefault();
+
+    const selectedRides = Object.keys(checkedRides).filter(
+      (ride) => checkedRides[ride]
+    );
+
+    navigate("/results", {
+      state: { completed: selectedRides },
+    });
   }
+
+  // async function fetchQueueTimes() {
+  //   const response = await fetch(URL);
+  //   const data = await response.json();
+  //   console.log(data);
+  // }
 
   return (
-    <div className="category-selector">
-      <h2>Which of these rides do you like?</h2>
-      <input
-        type="checkbox"
-        value="Pirates of the Caribbean"
-        onChange={HandleChange}
-      />{" "}
-      Pirates of the Caribbean {isChecked && <span>Time</span>}
-      <br />
-      <input
-        type="checkbox"
-        value="Haunted Mansion"
-        onChange={HandleChange}
-      />{" "}
-      Haunted Mansion
-      <br />
-      <input
-        type="checkbox"
-        value="Jungle Cruise"
-        onChange={HandleChange}
-      />{" "}
-      Jungle Cruise
-      <br />
-      <input
-        type="checkbox"
-        value="Space Mountain"
-        onChange={HandleChange}
-      />{" "}
-      Space Mountain
-      <br />
-      <input
-        type="checkbox"
-        value="It's a Small World"
-        onChange={HandleChange}
-      />{" "}
-      It's a Small World
-      <br />
-      <input
-        type="checkbox"
-        value="Thunder Mountain Railroad"
-        onChange={HandleChange}
-      />{" "}
-      Thunder Mountain Railroad
-      <br />
-    </div>
+    <>
+      <div className="category-selector">
+        <h2>Which of these rides do you like?</h2>
+        <form onSubmit={handleSubmit}>
+          {rides.map((ride) => (
+            <div key={ride.value}>
+              <input
+                type="checkbox"
+                value={ride.value}
+                onChange={handleChange}
+              />
+              {ride.label} {checkedRides[ride.value] && <span>Time</span>}
+            </div>
+          ))}
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+    </>
   );
 }
 
