@@ -21,7 +21,7 @@ export default function Results() {
       )}
 
       <button onClick={() => navigate("/")}>
-        Back to To-Do List
+        Back to Ride Survey
       </button>
     </div>
   );
